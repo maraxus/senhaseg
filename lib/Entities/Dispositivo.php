@@ -7,9 +7,8 @@ use DateTime;
 class Dispositivo extends BaseEntity
 {
 	private $id, $hostname, $ip, $idTipo, $fabricante, $modelo, $ativo, $dtCadastro;
-	private $tipo;
 
-	protected function __construct($id, $hostname, $ip, $idTipo, $fabricante, $modelo, $ativo, $dtCadastro) {
+	public function __construct($id, $hostname, $ip, $idTipo, $fabricante, $modelo, $ativo, $dtCadastro) {
 		$this->id = $id;
 		$this->hostname = $hostname;
 		$this->ip = $ip;
@@ -23,14 +22,14 @@ class Dispositivo extends BaseEntity
 
 	public static function fromState($state){
 		return new self(
-			$state['id'],
-			$state['hostname'],
-			$state['ip'],
-			$state['idTipo'],
-			$state['fabricante'],
-			$state['modelo'],
-			$state['ativo'],
-			$state['dtCadastro']
+			isset($state['id']) ? $state['id'] : 0,
+			isset($state['hostname']) ? $state['hostname'] : '',
+			isset($state['ip']) ? $state['ip'] : '',
+			isset($state['idTipo']) ? $state['idTipo'] : 0,
+			isset($state['fabricante']) ? $state['fabricante'] : '',
+			isset($state['modelo']) ? $state['modelo'] : '',
+			isset($state['ativo']) ? $state['ativo'] : false,
+			isset($state['dtCadastro']) ? $state['dtCadastro'] : new DateTime()
 		);
 	}
 
@@ -100,6 +99,19 @@ class Dispositivo extends BaseEntity
 
 	public function getDtCadastro(){
 		return $this->dtCadastro->format('d/m/Y');
+	}
+
+	public function getValuesString()
+	{
+		$str =  $this->getId().',';
+		$str .= $this->getHostname().',';
+		$str .= $this->getIp().',';
+		$str .= $this->getIdTipo().',';
+		$str .= $this->getFabricante().',';
+		$str .= $this->getModelo().',';
+		$str .= $this->isActive().',';
+		$str .= $this->getDtCadastro();
+		return $str;
 	}
 
 }

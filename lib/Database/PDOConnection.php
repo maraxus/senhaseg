@@ -31,14 +31,64 @@ class PDOConnection implements StorageDriver
 		}
 		return new self($config['dsn'], $config['user'], $config['pass'], $options);
 	}
-	public function prepareStatement($query){
+	public function getErrors() 
+	{
+		return $this->errors;
+	}
+
+	public function prepareStatement($query)
+	{
 		return $this->storage->prepare($query);
 	}
 
-	public function find($attr){}
-	public function mapRowToObject($row){} 
-	public function mapRecordsetToArray($rs){}
-	public function insert($entity){}
+	public function mapRowToObject($row)
+	{
+		return \Entity\Dispositivo::fromState($row);
+	} 
+	public function findById($attr)
+	{
+		$statement = $this->storage->prepare('SELECT * FROM dispositivos WHERE id = :id');
+		$statement->bindParam(':id', $attr, PDO::PARAM_INT);
+		$statement->execute();
+		$rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+		foreach ($rows as $row) {
+			$results = $this->mapRowToObject($row);
+		}
+		return $results;
+	}
+	public function findAll()
+	{
+		$results = array();
+		$statement = $this->storage->prepare('SELECT * FROM dispositivos');
+		$statement->execute();
+		$rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+		foreach ($rows as $row) {
+			$results = $this->mapRowToObject($row);
+		}
+		return $results;
+	}
+	public function insert($entity)
+	{
+		//$reflector = new \ReflectionClass('\\'.get_class($entity));
+		//$fields = $reflector->getdefaultProperties();
+		//unset($fields['id']);
+		//unset($fields['dtCadastro']);
+		//$fields = implode(', ',array_keys($fields));
+		$sql =  'INSERT INTO dispositivos ';
+		//$sql .= '('.$fields.') ';
+		$sql .= '(hostname, ip, id_tipo, fabricante, modelo, ativo) ';
+		$sql .= 'values(:hostname, :ip, :id_tipo, :fabricante, :modelo, :ativo)';
+		$statement = $this->storage->prepare($sql);
+		$statement->bindValue(':hostname', $entity->getHostname(), PDO::PARAM_STR);
+		$statement->bindValue(':ip', $entity->getIp(), PDO::PARAM_STR);
+		$statement->bindValue(':id_tipo', $entity->getIdTipo(), PDO::PARAM_INT);
+		$statement->bindValue(':fabricante', $entity->getFabricante(), PDO::PARAM_STR);
+		$statement->bindValue(':modelo', $entity->getModelo(), PDO::PARAM_STR);
+		$statement->bindValue(':ativo', $entity->isActive(), PDO::PARAM_BOOL);
+		echo $sql;
+		return $statement->execute();
+		
+	}
 	public function delete($entity){}
 	public function update($entity){}
 }

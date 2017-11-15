@@ -1,8 +1,8 @@
 <?php
-namespace Database\Mapper;
+namespace Database\Mappers;
 
 /**
-* 
+* Common functionality for data mappers
 */
 class StorageMapper
 {
@@ -11,6 +11,5 @@ class StorageMapper
 	{
 		$this->driver = $driver;
 	}
-
 
 }

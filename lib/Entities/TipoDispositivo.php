@@ -17,8 +17,8 @@ class TipoDispositivo extends BaseEntity
 
 	public static function fromState(array $state) {
 		return new self(
-			$state['id'],
-			$state['nome']
+			isset($state['id']) ? $state['id'] : 0,
+			isset($state['nome']) ? $state['nome'] : ''
 		);
 	}
 
