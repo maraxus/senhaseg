@@ -6,9 +6,9 @@ use DateTime;
 */
 class Dispositivo extends BaseEntity
 {
-	private $id, $hostname, $ip, $idTipo, $fabricante, $modelo, $ativo, $dtCadastro;
+	protected $id, $hostname, $ip, $idTipo, $fabricante, $modelo, $ativo, $dtCadastro;
 
-	public function __construct($id, $hostname, $ip, $idTipo, $fabricante, $modelo, $ativo, $dtCadastro) {
+	public function __construct($id = 0, $hostname, $ip, $idTipo, $fabricante, $modelo, $ativo, $dtCadastro) {
 		$this->id = $id;
 		$this->hostname = $hostname;
 		$this->ip = $ip;
@@ -31,6 +31,34 @@ class Dispositivo extends BaseEntity
 			isset($state['ativo']) ? $state['ativo'] : false,
 			isset($state['dtCadastro']) ? $state['dtCadastro'] : new DateTime()
 		);
+	}
+
+	public function findAll() 
+	{
+		return array();
+	}
+
+	public function toArray()
+	{
+		$array = array();
+		foreach ($this as $key => $value) {
+			$array[$key] = $value;
+		}
+		return $array;
+	}
+
+	public function getFriendlyNames()
+	{
+		$friendly = array(
+			'hostname' => 'hostname',
+			'ip' => 'ip',
+			'idTipo' => 'tipo',
+			'fabricante' => 'fabricante',
+			'modelo' => 'modelo',
+			'ativo' => 'ativo',
+			'dtCadastro' => 'cadastro'
+		);
+		return $friendly;
 	}
 
 	public function getId(){
@@ -79,6 +107,10 @@ class Dispositivo extends BaseEntity
 
 	public function setModelo($str) {
 		$this->modelo = $str;
+	}
+
+	public function getActive(){
+		return $this->ativo;
 	}
 
 	public function isActive(){

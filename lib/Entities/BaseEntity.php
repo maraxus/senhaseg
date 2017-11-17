@@ -13,12 +13,20 @@ define('BELONGS_TO_MANY','belongs_to_many');
 /**
 * Provides basic common functionality for Entities
 */
-class BaseEntity
+abstract class BaseEntity
 {
 
 	protected function __construct()
 	{
 		# code...
 	}
+
+	/**
+	 * This should return an array with the property identifiers and their friendly names. 
+	 * Only for the properties which are meaningful for users, and could get
+	 * shown in a view. So ID's for example, shouldn't be included in this list
+	 * array['ident'] => 'pretty name';
+	 */
+	abstract public function getFriendlyNames();
 
 }

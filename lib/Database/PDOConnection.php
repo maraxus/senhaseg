@@ -41,41 +41,48 @@ class PDOConnection implements StorageDriver
 		return $this->storage->prepare($query);
 	}
 
-	public function mapRowToObject($row)
+	public function mapRowToObject($row, $className)
 	{
-		return \Entity\Dispositivo::fromState($row);
+		$args = array();
+		foreach ($row as $key => $value) {
+			$args[] = $value;
+		}
+		$rf = new \ReflectionClass($className);
+		return $rf->newinstanceArgs($args);
 	} 
-	public function findById($attr)
+	public function findById($id, $className)
 	{
+		$results = array();
 		$statement = $this->storage->prepare('SELECT * FROM dispositivos WHERE id = :id');
-		$statement->bindParam(':id', $attr, PDO::PARAM_INT);
+		$statement->bindParam(':id', $id, PDO::PARAM_INT);
 		$statement->execute();
 		$rows = $statement->fetchAll(PDO::FETCH_ASSOC);
-		foreach ($rows as $row) {
-			$results = $this->mapRowToObject($row);
+		if($rows){
+			foreach ($rows as $row) {
+				$results = $this->mapRowToObject($row,$className);
+			}
 		}
 		return $results;
 	}
-	public function findAll()
+	public function findAll($className)
 	{
 		$results = array();
 		$statement = $this->storage->prepare('SELECT * FROM dispositivos');
 		$statement->execute();
 		$rows = $statement->fetchAll(PDO::FETCH_ASSOC);
-		foreach ($rows as $row) {
-			$results = $this->mapRowToObject($row);
+		if ($rows) {
+			foreach ($rows as $row) {
+				$results[] = $this->mapRowToObject($row, $className);
+			}
 		}
 		return $results;
 	}
-	public function insert($entity)
+	public function insert($entity, $className)
 	{
-		//$reflector = new \ReflectionClass('\\'.get_class($entity));
-		//$fields = $reflector->getdefaultProperties();
-		//unset($fields['id']);
-		//unset($fields['dtCadastro']);
-		//$fields = implode(', ',array_keys($fields));
+		if (! ($entity instanceof $className)) {
+			return false;
+		}
 		$sql =  'INSERT INTO dispositivos ';
-		//$sql .= '('.$fields.') ';
 		$sql .= '(hostname, ip, id_tipo, fabricante, modelo, ativo) ';
 		$sql .= 'values(:hostname, :ip, :id_tipo, :fabricante, :modelo, :ativo)';
 		$statement = $this->storage->prepare($sql);
@@ -84,11 +91,42 @@ class PDOConnection implements StorageDriver
 		$statement->bindValue(':id_tipo', $entity->getIdTipo(), PDO::PARAM_INT);
 		$statement->bindValue(':fabricante', $entity->getFabricante(), PDO::PARAM_STR);
 		$statement->bindValue(':modelo', $entity->getModelo(), PDO::PARAM_STR);
-		$statement->bindValue(':ativo', $entity->isActive(), PDO::PARAM_BOOL);
-		echo $sql;
+		$statement->bindValue(':ativo', $entity->getActive(), PDO::PARAM_BOOL);	
 		return $statement->execute();
 		
 	}
-	public function delete($entity){}
-	public function update($entity){}
+	public function delete($entity, $className)
+	{
+		if (!($entity instanceof $className)) {
+			return false;
+		}
+		$sql = 'DELETE FROM dispositivos WHERE id = :id';
+		$statement = $this->storage->prepare($sql);
+		$statement->bindValue(':id', $entity->getId(), PDO::PARAM_INT);
+		return $statement->execute();
+
+	}
+	public function update($entity, $className)
+	{
+		if (!($entity instanceof $className)) {
+			return false;
+		}
+		$sql  = 'UPDATE dispositivos SET ';
+		$sql .= 'hostname = :hostname, ';
+		$sql .= 'ip = :ip, ';
+		$sql .= 'id_tipo = :id_tipo, ';
+		$sql .= 'fabricante = :fabricante, ';
+		$sql .= 'modelo = :modelo, ';
+		$sql .= 'ativo = :ativo ';
+		$sql .= 'WHERE id = :id';
+		$statement = $this->storage->prepare($sql);
+		$statement->bindValue(':hostname', $entity->getHostname(), PDO::PARAM_STR);
+		$statement->bindValue(':ip', $entity->getIp(), PDO::PARAM_STR);
+		$statement->bindValue(':id_tipo', $entity->getIdTipo(), PDO::PARAM_INT);
+		$statement->bindValue(':fabricante', $entity->getFabricante(), PDO::PARAM_STR);
+		$statement->bindValue(':modelo', $entity->getModelo(), PDO::PARAM_STR);
+		$statement->bindValue(':ativo', $entity->getActive(), PDO::PARAM_BOOL);	
+		$statement->bindValue(':id', $entity->getId(), PDO::PARAM_INT);
+		return $statement->execute();
+	}
 }

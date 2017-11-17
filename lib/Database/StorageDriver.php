@@ -11,9 +11,9 @@ interface StorageDriver
 	 * like credentials for database connection for example
 	 */
 	public static function fromConfig(Array $config);
-	public function findById($attr);
-	public function mapRowToObject($row);
-	public function insert($entity);
-	public function delete($entity);
-	public function update($entity);
+	public function findById($id, $className);
+	public function mapRowToObject($row, $className);
+	public function insert($entity, $className);
+	public function delete($entity, $className);
+	public function update($entity, $className);
 }

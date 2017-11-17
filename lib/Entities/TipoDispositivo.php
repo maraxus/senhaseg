@@ -6,7 +6,7 @@ namespace Entity;
 */
 class TipoDispositivo extends BaseEntity
 {
-	private $id, $nome;
+	protected $id, $nome;
 
 	protected function __construct($id, $nome)
 	{
@@ -20,6 +20,14 @@ class TipoDispositivo extends BaseEntity
 			isset($state['id']) ? $state['id'] : 0,
 			isset($state['nome']) ? $state['nome'] : ''
 		);
+	}
+
+	public function getFriendlyNames()
+	{
+		$friendly = array(
+			'nome' => 'nome'
+		);
+		return $friendly;
 	}
 
 	public function getId() {
