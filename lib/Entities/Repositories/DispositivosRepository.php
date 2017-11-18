@@ -25,7 +25,7 @@ use Entity\Dispositivo;
 
  	function createNewDispositivo(Array $state) 
  	{
- 		$new = createNewFromState($tate);
+ 		$new = createNewFromState($state);
  		if ($new->isValid()) {
 	 		$this->storage->insert($new);
 	 		return true;

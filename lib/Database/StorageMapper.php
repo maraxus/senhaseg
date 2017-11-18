@@ -3,6 +3,7 @@ namespace Database\Mappers;
 use \Entity\BaseEntity;
 use \Database\StorageDriver;
 use ReflectionClass;
+use Exception;
 /**
 * Common functionality for data mappers. It describes and maps a entity to a persistent store, like one,
 * or various database tables. Extend this to implement new persistance mappings for your entities.

@@ -16,7 +16,7 @@ class DispositivoController extends Controller
 
 	function setListDataRows()
 	{
-		$this->view->data['results'] = $this->model->findAll(); 
+		$this->view->data['results'] = $this->mapper->findAll(); 
 	}
 
 	public function getView()

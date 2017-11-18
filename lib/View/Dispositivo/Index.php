@@ -37,6 +37,7 @@ class Index extends View
 	public function renderLines($lineHeader = "") 
 	{
 		foreach ($this->data['results'] as $dispositivo){
+			echo '<tr>';
 			$columns = $dispositivo->toArray();
 			foreach ($columns as $key => $value) {
 				if ($lineHeader && $this->isInHeaders($lineHeader) ) {
@@ -45,6 +46,7 @@ class Index extends View
 		      		echo '<tr>'. $value .'</tr>';
 				}
 			}
+			echo '</tr>';
       	}	
 	}
 }

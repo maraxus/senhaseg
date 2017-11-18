@@ -15,9 +15,6 @@ require('templates/shared/header.php');
 		'pass' => 'charlote'
 	));
 	$mapper = new \Database\Mappers\DispositivoPDOMapper($conn, \Entity\Dispositivo::class);
-	$mapper2 = new \Database\Mappers\TipoDispositivoPDOMapper($conn, \Entity\TipoDispositivo::class);
-	echo $mapper->getClassName();
-	echo  ' '.$mapper2->getClassName();
 	$view = new \View\Dispositivo\Index();
 	$entity = \Entity\Dispositivo::fromState(array(
 		'hostname'=>'www.netflix.com',
@@ -27,7 +24,7 @@ require('templates/shared/header.php');
 		'modelo'=>'DER4-7665',
 		true,
 	));
-	$controller = new \Controller\DispositivoController($entity, $view);
+	$controller = new \Controller\DispositivoController($entity, $view, $mapper);
 	$view = $controller->getView();
 	require('templates/index/list.php'); ?>
 </div>

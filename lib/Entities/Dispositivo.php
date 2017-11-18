@@ -109,7 +109,7 @@ class Dispositivo extends BaseEntity
 		$this->modelo = $str;
 	}
 
-	public function getActive(){
+	public function getAtivo(){
 		return $this->ativo;
 	}
 
