@@ -21,10 +21,20 @@ class DispositivoController extends Controller
 		$this->view->data['results'] = $results;
 	}
 
-	public function getView()
+	public function getView($action, $template)
 	{
-		$this->setListDataHeaders();
-		$this->setListDataRows();
-		return $this->view;
+		$view;
+		switch ($action) {
+			case 'index':
+				$this->setListDataHeaders();
+				$this->setListDataRows();
+				$view = $this->view;
+				require($template);
+				break;
+			
+			default:
+				# code...
+				break;
+		} 
 	}
 }

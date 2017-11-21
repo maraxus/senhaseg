@@ -14,5 +14,5 @@ abstract class Controller
 		$this->mapper = $mapper;
 	}
 
-	abstract public function getView();
+	abstract public function getView($action, $template);
 }
