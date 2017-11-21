@@ -21,7 +21,7 @@ class DispositivoController extends Controller
 		$this->view->data['results'] = $results;
 	}
 
-	public function getView($action, $template)
+	public function handleAction($action, $template)
 	{
 		$view;
 		switch ($action) {
