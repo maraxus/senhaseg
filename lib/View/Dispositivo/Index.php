@@ -39,11 +39,13 @@ class Index extends View
 		foreach ($this->data['results'] as $dispositivo){
 			echo '<tr>';
 			$columns = $dispositivo->toArray();
-			foreach ($columns as $key => $value) {
-				if ($lineHeader && $this->isInHeaders($lineHeader) ) {
-					echo '<th scope="row">'.$value."</th>"; 
-				} elseif($this->isInHeaders($lineHeader)) {
-		      		echo '<tr>'. $value .'</tr>';
+			foreach ($columns as $column => $value) {
+				if ($this->isInHeaders($column)) {
+					if ($lineHeader == $column) {
+						echo '<th scope="row">'.$value."</th>";
+					} else {
+						echo '<td>'. $value .'</td>';
+					}
 				}
 			}
 			echo '</tr>';

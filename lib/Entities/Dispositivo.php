@@ -41,8 +41,10 @@ class Dispositivo extends BaseEntity
 	public function toArray()
 	{
 		$array = array();
+		$getterMethod;
 		foreach ($this as $key => $value) {
-			$array[$key] = $value;
+			$getterMethod = 'get'.ucfirst($key);
+			$array[$key] = $this->$getterMethod();
 		}
 		return $array;
 	}
@@ -130,7 +132,8 @@ class Dispositivo extends BaseEntity
 	}
 
 	public function getDtCadastro(){
-		return $this->dtCadastro->format('d/m/Y');
+		$date = DateTime::createFromFormat('Y-m-d H:i:s', $this->dtCadastro); 
+		return $date->format('d/m/Y');
 	}
 
 	public function getValuesString()
