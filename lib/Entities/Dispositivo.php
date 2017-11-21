@@ -49,7 +49,7 @@ class Dispositivo extends BaseEntity
 		return $array;
 	}
 
-	public function getFriendlyNames()
+	public static function getFriendlyNames()
 	{
 		$friendly = array(
 			'hostname' => 'hostname',

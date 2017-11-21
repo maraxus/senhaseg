@@ -24,7 +24,7 @@ require('templates/shared/header.php');
 		'modelo'=>'DER4-7665',
 		true,
 	));
-	$controller = new \Controller\DispositivoController($entity, $view, $mapper);
+	$controller = new \Controller\DispositivoController($view, $mapper);
 	$view = $controller->getView();
 	require('templates/index/list.php'); ?>
 </div>

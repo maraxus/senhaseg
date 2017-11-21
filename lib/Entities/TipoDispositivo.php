@@ -22,7 +22,7 @@ class TipoDispositivo extends BaseEntity
 		);
 	}
 
-	public function getFriendlyNames()
+	public static function getFriendlyNames()
 	{
 		$friendly = array(
 			'nome' => 'nome'

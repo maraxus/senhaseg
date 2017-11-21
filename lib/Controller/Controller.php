@@ -1,6 +1,5 @@
 <?php
 namespace Controller;
-use \Entity\BaseEntity;
 use \View\View;
 use \Database\Mappers\StorageMapper;
 /**
@@ -8,10 +7,9 @@ use \Database\Mappers\StorageMapper;
 */
 abstract class Controller
 {
-	protected $model, $view, $mapper;
-	function __construct(BaseEntity $entity, View $view, StorageMapper $mapper)
+	protected $view, $mapper;
+	function __construct(View $view, StorageMapper $mapper)
 	{
-		$this->model = $entity;
 		$this->view = $view;
 		$this->mapper = $mapper;
 	}

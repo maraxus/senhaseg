@@ -24,6 +24,11 @@ class DispositivoPDOMapper extends StorageMapper
 	);
 	protected $autoValues = array('id','dt_cadastro');
 
+	public function getFriendlyNames() 
+	{
+		return ($this->className)::getFriendlyNames();
+	}
+
 	public function getRelationships() 
 	{
 		return $this->relationships;

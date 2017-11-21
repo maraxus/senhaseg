@@ -27,6 +27,6 @@ abstract class BaseEntity
 	 * shown in a view. So ID's for example, shouldn't be included in this list
 	 * array['ident'] => 'pretty name';
 	 */
-	abstract public function getFriendlyNames();
+	abstract public static function getFriendlyNames();
 
 }
