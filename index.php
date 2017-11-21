@@ -17,7 +17,7 @@ require('templates/shared/header.php');
 	$mapper = new \Database\Mappers\DispositivoPDOMapper($conn, \Entity\Dispositivo::class);
 	$view = new \View\Dispositivo\Index();
 	$controller = new \Controller\DispositivoController($view, $mapper);
-	$view = $controller->getView('index','templates/index/list.php'); ?>
+	$controller->handleAction('index','templates/index/list.php'); ?>
 </div>
 <?php
 require('templates/shared/footer.php');

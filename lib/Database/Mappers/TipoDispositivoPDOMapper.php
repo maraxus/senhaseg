@@ -1,20 +1,31 @@
 <?php
 namespace Database\Mappers;
-use \Database\Mappers\StorageMapper;
+use \Database\Mappers\PDOStorageMapper;
+use \Database\Mappers\DispositivoPDOMapper;
+use \Entitty\Dispositivo;
+use PDO;
 
 /**
 * common functionality for mappers mapping attribues on entities to PDO DAO
 * from base class: $driver, $reflector, $className
 */
-class TipoDispositivoPDOMapper extends StorageMapper
+class TipoDispositivoPDOMapper extends PDOStorageMapper
 {
 	
-	protected $relationships;
+	protected $relationships = array(
+		'dispositivos' => array(
+			'relation' => 'has_many',
+			'mapper' => DispositivoPDOMapper::class,
+			'className' => Dispositivo::class,
+			'tableName' => 'tipo',
+			'pk' => 'id',
+			'fk' => 'id'
+	));
 	protected $tableName = 'tipo';
 	protected $primaryKey = 'id';
 	protected $fieldsMap = array(
-		'id' => 'id',
-		'nome' => 'nome'
+		'id' => array('id', PDO::PARAM_INT),
+		'nome' => array('nome', PDO::PARAM_STR),
 	);
 	protected $autoValues = array('id');
 

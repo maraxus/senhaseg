@@ -33,9 +33,10 @@ class Dispositivo extends BaseEntity
 		);
 	}
 
-	public function findAll() 
+	public function getAttribute($attribute)
 	{
-		return array();
+		$getterMethod = 'get'.ucfirst($attribute);
+		return $this->$getterMethod();
 	}
 
 	public function toArray()

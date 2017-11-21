@@ -9,6 +9,7 @@ require('Entities/Repositories/DispositivosRepository.php');
 require('Database/StorageDriver.php');
 require('Database/PDOConnection.php');
 require('Database/StorageMapper.php');
+require('Database/Mappers/PDOStorageMapper.php');
 require('Database/Mappers/DispositivoPDOMapper.php');
 require('Database/Mappers/TipoDispositivoPDOMapper.php');
 require('Controller/Controller.php');

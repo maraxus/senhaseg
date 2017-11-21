@@ -8,7 +8,7 @@ class TipoDispositivo extends BaseEntity
 {
 	protected $id, $nome;
 
-	protected function __construct($id, $nome)
+	public function __construct($id, $nome)
 	{
 		$this->id = $id;
 		$this->nome = $nome;
@@ -22,9 +22,27 @@ class TipoDispositivo extends BaseEntity
 		);
 	}
 
+	public function getAttribute($attribute)
+	{
+		$getterMethod = 'get'.ucfirst($attribute);
+		return $this->$getterMethod();
+	}
+
+	public function toArray()
+	{
+		$array = array();
+		$getterMethod;
+		foreach ($this as $key => $value) {
+			$getterMethod = 'get'.ucfirst($key);
+			$array[$key] = $this->$getterMethod();
+		}
+		return $array;
+	}
+
 	public static function getFriendlyNames()
 	{
 		$friendly = array(
+			'id' => 'id',
 			'nome' => 'nome'
 		);
 		return $friendly;
@@ -44,6 +62,13 @@ class TipoDispositivo extends BaseEntity
 
 	public function setNome($str){
 		$this->nome = $str;
+	}
+
+	public function getValuesString()
+	{
+		$str =  $this->getId().',';
+		$str .= $this->getNome().',';
+		return $str;
 	}
 
 }
