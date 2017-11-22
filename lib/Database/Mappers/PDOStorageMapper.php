@@ -48,11 +48,12 @@ class PDOStorageMapper extends StorageMapper
 
 	public function mapRowToObject($row)
 	{
+		$rf = new \ReflectionClass($this->getClassName());
 		$args = array();
 		foreach ($row as $key => $value) {
 			$args[] = $value;
 		}
-		$rf = new \ReflectionClass($this->getClassName());
+		//echo var_dump($args);
 		return $rf->newinstanceArgs($args);
 	} 
 	public function getRelated($entity, $relationship) 
@@ -61,7 +62,6 @@ class PDOStorageMapper extends StorageMapper
 		if (in_array($relationship, $relationships) ) {
 			$relationship = $this->relationships[$relationship];
 			$mapperClass = $relationship['mapper'];
-			echo get_class($this->driver);
 			$mapper = new $mapperClass($this->driver, $relationship['className']);
 			switch ($relationship['relation']) {
 				case 'belongs_to':
@@ -77,6 +77,16 @@ class PDOStorageMapper extends StorageMapper
 		}
 		return $related;
 	}
+
+	public function isRelated($attribute) 
+	{
+		$relatedValues = (array) array_keys($this->relatedValues);
+		if ($relatedValues && in_array($attribute, $relatedValues)) {
+			return true;
+		}
+		return false;
+	}
+
 	public function findById($id)
 	{
 		$results = array();
@@ -108,6 +118,31 @@ class PDOStorageMapper extends StorageMapper
 		return $results;
 	}
 
+	public function findWithRelated($related)
+	{
+		$results = array();
+		$tableName = $this->tableName;
+		$sql;
+		if($this->isRelated($related)) {
+			$relatedTable = $this->relationships[$related]['tableName'];
+			$relatedPk = $this->relationships[$related]['pk'];
+			$boundFk = $this->relationships[$related]['fk'];
+			$boundAttr = $this->relatedValues[$related][0];
+			$boundForeignAttr = $this->relatedValues[$related][1];
+			$sql = "SELECT {$tableName}.*, {$relatedTable}.{$boundForeignAttr} FROM {$tableName} ";
+			$sql .= "INNER JOIN {$relatedTable} ON ({$tableName}.{$boundFk} = {$relatedTable}.{$relatedPk})";
+		}
+		$statement = $this->driver->prepareStatement($sql);
+		$statement->execute();
+		$rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+		if ($rows) {
+			foreach ($rows as $row) {
+				$results[] = $this->mapRowToObject($row);
+			}
+		}
+		return $results;
+	}
+
 	public function filterFields()
 	{
 		$fields = array_keys($this->fieldsMap);
@@ -117,6 +152,14 @@ class PDOStorageMapper extends StorageMapper
 		// Like AUTO INCREMENT primary keys at insert 
 		if(count($this->autoValues)){
 			foreach ($this->autoValues as $field) {
+				$key = array_search($field, $fields);
+				unset($fields[$key]);
+			}
+		}
+		// Also, related entitys fields
+		$relatedValuesKeys = array_keys((array) $this->relatedValues);
+		if(count($relatedValuesKeys)){
+			foreach ($relatedValuesKeys as $field) {
 				$key = array_search($field, $fields);
 				unset($fields[$key]);
 			}

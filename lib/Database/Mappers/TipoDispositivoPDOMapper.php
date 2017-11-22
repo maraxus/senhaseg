@@ -25,7 +25,7 @@ class TipoDispositivoPDOMapper extends PDOStorageMapper
 	protected $primaryKey = 'id';
 	protected $fieldsMap = array(
 		'id' => array('id', PDO::PARAM_INT),
-		'nome' => array('nome', PDO::PARAM_STR),
+		'tipo' => array('tipo', PDO::PARAM_STR),
 	);
 	protected $autoValues = array('id');
 

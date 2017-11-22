@@ -6,19 +6,19 @@ namespace Entity;
 */
 class TipoDispositivo extends BaseEntity
 {
-	protected $id, $nome;
+	protected $id, $Tipo;
 
-	public function __construct($id, $nome)
+	public function __construct($id, $Tipo)
 	{
 		$this->id = $id;
-		$this->nome = $nome;
+		$this->Tipo = $Tipo;
 
 	}
 
 	public static function fromState(array $state) {
 		return new self(
 			isset($state['id']) ? $state['id'] : 0,
-			isset($state['nome']) ? $state['nome'] : ''
+			isset($state['Tipo']) ? $state['Tipo'] : ''
 		);
 	}
 
@@ -43,7 +43,7 @@ class TipoDispositivo extends BaseEntity
 	{
 		$friendly = array(
 			'id' => 'id',
-			'nome' => 'nome'
+			'Tipo' => 'Tipo'
 		);
 		return $friendly;
 	}
@@ -56,18 +56,18 @@ class TipoDispositivo extends BaseEntity
 		$this->id = $str;
 	}
 
-	public function getNome(){
-		return $this->nome;	
+	public function getTipo(){
+		return $this->Tipo;	
 	}
 
-	public function setNome($str){
-		$this->nome = $str;
+	public function setTipo($str){
+		$this->Tipo = $str;
 	}
 
 	public function getValuesString()
 	{
 		$str =  $this->getId().',';
-		$str .= $this->getNome().',';
+		$str .= $this->getTipo().',';
 		return $str;
 	}
 

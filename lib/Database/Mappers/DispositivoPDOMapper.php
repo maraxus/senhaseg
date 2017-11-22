@@ -31,7 +31,10 @@ class DispositivoPDOMapper extends PDOStorageMapper
 		'modelo' => array('modelo', PDO::PARAM_STR),
 		'ativo' => array('ativo', PDO::PARAM_BOOL),
 		'dt_cadastro' => array('dtCadastro',PDO::PARAM_STR),
+		'tipo' => array('tipo',PDO::PARAM_STR)
 	);
 	protected $autoValues = array('id','dt_cadastro');
+
+	protected $relatedValues = array('tipo' => array('tipo', 'tipo'));
 	
 }

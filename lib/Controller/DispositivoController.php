@@ -10,16 +10,21 @@ class DispositivoController extends Controller
 	function setListDataHeaders()
 	{
 		// - lista de attributos visiveis na listagem
-		$this->view->data['headers'] = $this->mapper->getFriendlyNames();
+		$headers = $this->mapper->getFriendlyNames();
+		$headers = array_filter($headers, function($header) {
+			if($this->mapper->isRelated($header)) {
+				return false;
+			}
+			return true;
+		}, ARRAY_FILTER_USE_KEY);
+		$this->view->data['headers'] = $headers; 
 
 	}
 
 	function setListDataRows()
 	{
-		$results = $this->mapper->findAll(); 
-		foreach ($results as $dispositivo) {
-			echo var_dump($this->mapper->getRelated($dispositivo, 'tipo'));
-		}
+		$results = $this->mapper->findWithRelated('tipo'); 
+		//echo var_dump($results);
 		$this->view->data['results'] = $results;
 	}
 

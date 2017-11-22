@@ -7,6 +7,8 @@ use DateTime;
 class Dispositivo extends BaseEntity
 {
 	protected $id, $hostname, $ip, $idTipo, $fabricante, $modelo, $ativo, $dtCadastro;
+	// artificial attributes: (related or computed)
+	protected $tipo = array();
 
 	public function __construct($id = 0, $hostname, $ip, $idTipo, $fabricante, $modelo, $ativo, $dtCadastro) {
 		$this->id = $id;
@@ -59,7 +61,8 @@ class Dispositivo extends BaseEntity
 			'fabricante' => 'fabricante',
 			'modelo' => 'modelo',
 			'ativo' => 'ativo',
-			'dtCadastro' => 'cadastro'
+			'dtCadastro' => 'cadastro',
+			'tipo' => 'tipo'
 		);
 		return $friendly;
 	}
@@ -137,6 +140,16 @@ class Dispositivo extends BaseEntity
 		return $date->format('d/m/Y');
 	}
 
+	public function getTipo()
+	{
+		return $this->tipo;
+	}
+
+	public function setTipo($related)
+	{
+		$this->tipo = (array) $related;
+	} 
+
 	public function getValuesString()
 	{
 		$str =  $this->getId().',';
@@ -145,7 +158,7 @@ class Dispositivo extends BaseEntity
 		$str .= $this->getIdTipo().',';
 		$str .= $this->getFabricante().',';
 		$str .= $this->getModelo().',';
-		$str .= $this->isActive().',';
+		$str .= $this->getAtivo().',';
 		$str .= $this->getDtCadastro();
 		return $str;
 	}
